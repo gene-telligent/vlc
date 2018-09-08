@@ -144,6 +144,17 @@ class ICEDestBox: public VirtualDestBox
         QSpinBox *ICEPort;
 };
 
+class RTMPDestBox: public VirtualDestBox
+{
+    Q_OBJECT
+    public:
+        RTMPDestBox( QWidget *_parent = NULL );
+        QString getMRL( const QString& ) Q_DECL_OVERRIDE;
+    private:
+        QLineEdit *RTMPEdit;
+        QLineEdit *RTMPStreamKeyEdit;
+};
+
 
 
 #endif

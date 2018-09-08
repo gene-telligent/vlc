@@ -74,6 +74,7 @@ SoutDialog::SoutDialog( QWidget *parent, intf_thread_t *_p_intf, const QString& 
     ui.destBox->addItem( "RTP Audio/Video Profile" );
     ui.destBox->addItem( "UDP (legacy)" );
     ui.destBox->addItem( "Icecast" );
+    ui.destBox->addItem( "RTMP" );
 
     BUTTONACT( ui.addButton, addDest() );
 
@@ -147,6 +148,10 @@ void SoutDialog::addDest( )
         case 7:
             db = new ICEDestBox( this );
             caption = "Icecast";
+            break;
+        case 8:
+            db = new RTMPDestBox( this );
+            caption = "RTMP";
             break;
         default:
             vlc_assert_unreachable();

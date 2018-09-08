@@ -454,8 +454,6 @@ ICEDestBox::ICEDestBox( QWidget *_parent ) : VirtualDestBox( _parent )
     CT( ICEPassEdit );
 }
 
-#undef CS
-#undef CT
 
 QString ICEDestBox::getMRL( const QString& )
 {
@@ -476,3 +474,50 @@ QString ICEDestBox::getMRL( const QString& )
     return m.getMrl();
 }
 
+
+RTMPDestBox::RTMPDestBox( QWidget *_parent ) : VirtualDestBox( _parent )
+{
+    label->setText(
+        qtr( "This module outputs the transcoded stream to an RTMP server.\n"
+                "Note that the only compatible encodings are H.264 for video, "
+                "and MP3 or AAC for audio.") );
+
+    QLabel *RTMPLabel = new QLabel( qtr("Address"), this );
+    QLabel *RTMPStreamKeyLabel = new QLabel( qtr("Stream Key"), this );
+    layout->addWidget(RTMPLabel, 1, 0, 1, 1);
+    layout->addWidget(RTMPStreamKeyLabel, 2, 0, 1, 1);
+
+    RTMPEdit = new QLineEdit(this);
+    RTMPStreamKeyEdit = new QLineEdit(this);
+
+    layout->addWidget(RTMPEdit, 1, 1, 1, 1);
+    layout->addWidget(RTMPStreamKeyEdit, 2, 1, 1, 1);
+
+    CT( RTMPEdit );
+    CT( RTMPStreamKeyEdit );
+}
+
+
+QString RTMPDestBox::getMRL( const QString& )
+{
+    if( RTMPEdit->text().isEmpty() ) return "";
+
+    SoutMrl m;
+    m.begin( "std" );
+    m.option( "access", "rtmp" );
+    m.option( "mux", "flv" );
+
+    QString url = "rtmp://" + RTMPEdit->text();
+
+    if (!RTMPStreamKeyEdit->text().isEmpty())
+        url.append(url.endsWith('/') ? RTMPStreamKeyEdit->text() : 
+            "/" + RTMPStreamKeyEdit->text());
+
+    m.option( "dst", url );
+    m.end();
+    return m.getMrl();
+}
+
+
+#undef CS
+#undef CT
